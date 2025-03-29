@@ -1,96 +1,100 @@
 
 import streamlit as st
-import random
 
-# --- Setup ---
-st.set_page_config(page_title="The Spark List – Free Trial", layout="centered")
+st.set_page_config(page_title="The Spark List – Full Test", layout="centered")
+st.title("✨ The Spark List: Full Test Experience")
+st.markdown("Let’s discover what lights you up emotionally and hormonally.")
 
-# --- Welcome Screen ---
-st.title("✨ Welcome to The Spark List ✨")
-st.subheader("Your feel-good spark engine, based on your emotions and hormones.")
-st.markdown("Let’s find out what lights you up. This free trial includes a short test and one personalized Spark just for you.")
+# Question bank
+questions = [
+    ("You feel most alive when you...", [
+        "Try something you've never done before",
+        "Have deep emotional conversations",
+        "Create or design something meaningful",
+        "Organize or lead something important"
+    ]),
+    ("You're happiest when...", [
+        "You're traveling or exploring",
+        "You're hugging or bonding with someone",
+        "You're making art, writing, or building something",
+        "You're mentoring or supporting others"
+    ]),
+    ("Your ideal Saturday looks like...", [
+        "A spontaneous road trip",
+        "Cuddling and watching movies",
+        "Tinkering with a project",
+        "Planning for the week ahead"
+    ]),
+    ("When you're stressed, you tend to...", [
+        "Get impulsive or do something bold",
+        "Reach out to someone close",
+        "Focus intensely on a task or distraction",
+        "Withdraw and reflect silently"
+    ]),
+    ("What usually soothes you?", [
+        "Something exciting and distracting",
+        "A deep talk or loving hug",
+        "Finishing a task or cleaning up",
+        "Silence, nature, or journaling"
+    ]),
+    ("Which feels most rewarding?", [
+        "Adventure or thrills",
+        "Love and connection",
+        "Getting things done",
+        "Peace and stability"
+    ]),
+    ("Which hobby appeals to you most?", [
+        "Skydiving, dance, or martial arts",
+        "Spending time with loved ones",
+        "Painting, writing, or coding",
+        "Gardening or planning"
+    ]),
+    ("Which word feels most like home?", [
+        "Adventure",
+        "Intimacy",
+        "Creativity",
+        "Wisdom"
+    ])
+]
 
-# --- Test Questions ---
-st.markdown("## Quick Test: What Excites You?")
-driver_q = st.radio(
-    "When you feel most alive, it’s usually because you’re…",
-    [
-        "Exploring something new (Explorer, Adrenaline)",
-        "Feeling deeply connected to someone (Lover, Oxytocin)",
-        "Creating something beautiful (Creator, Dopamine)",
-        "Leading or organizing something meaningful (Queen, Serotonin)"
-    ]
-)
+# Initialize scores
+driver_scores = {"Explorer": 0, "Lover": 0, "Creator": 0, "Queen": 0}
+hormone_scores = {"Adrenaline": 0, "Oxytocin": 0, "Dopamine": 0, "Serotonin": 0}
 
-hormone_q = st.radio(
-    "Under stress, you usually…",
-    [
-        "Crave connection and comfort (Oxytocin)",
-        "Push through and act quickly (Adrenaline)",
-        "Focus and complete a task (Dopamine)",
-        "Withdraw to reflect (Serotonin)"
-    ]
-)
+# Show questions
+for i, (q, options) in enumerate(questions):
+    answer = st.radio(f"{i+1}. {q}", options, key=f"q{i}")
+    if answer == options[0]:
+        driver_scores["Explorer"] += 1
+        hormone_scores["Adrenaline"] += 1
+    elif answer == options[1]:
+        driver_scores["Lover"] += 1
+        hormone_scores["Oxytocin"] += 1
+    elif answer == options[2]:
+        driver_scores["Creator"] += 1
+        hormone_scores["Dopamine"] += 1
+    elif answer == options[3]:
+        driver_scores["Queen"] += 1
+        hormone_scores["Serotonin"] += 1
 
-# --- Result Logic ---
 if st.button("Reveal My Spark"):
-    # Tag scoring
-    hormone_map = {
-        "Oxytocin": 0,
-        "Dopamine": 0,
-        "Serotonin": 0,
-        "Adrenaline": 0
-    }
+    top_driver = max(driver_scores, key=driver_scores.get)
+    top_hormone = max(hormone_scores, key=hormone_scores.get)
 
-    driver_map = {
-        "Lover": 0,
-        "Explorer": 0,
-        "Creator": 0,
-        "Queen": 0
-    }
+    st.markdown("## 🔍 Your Results")
+    st.markdown(f"**Excitement Driver:** {top_driver}")
+    st.markdown(f"**Primary Hormone:** {top_hormone}")
 
-    # Score driver_q
-    if "Lover" in driver_q:
-        driver_map["Lover"] += 1
-        hormone_map["Oxytocin"] += 1
-    elif "Explorer" in driver_q:
-        driver_map["Explorer"] += 1
-        hormone_map["Adrenaline"] += 1
-    elif "Creator" in driver_q:
-        driver_map["Creator"] += 1
-        hormone_map["Dopamine"] += 1
-    elif "Queen" in driver_q:
-        driver_map["Queen"] += 1
-        hormone_map["Serotonin"] += 1
-
-    # Score hormone_q
-    if "Oxytocin" in hormone_q:
-        hormone_map["Oxytocin"] += 1
-    elif "Adrenaline" in hormone_q:
-        hormone_map["Adrenaline"] += 1
-    elif "Dopamine" in hormone_q:
-        hormone_map["Dopamine"] += 1
-    elif "Serotonin" in hormone_q:
-        hormone_map["Serotonin"] += 1
-
-    top_hormone = max(hormone_map, key=hormone_map.get)
-    top_driver = max(driver_map, key=driver_map.get)
-
-    st.markdown(f"### 🔬 Your Top Hormone: **{top_hormone}**")
-    st.markdown(f"### 💖 Your Excitement Driver: **{top_driver}**")
-
-    # Sample Sparks for demonstration
     spark_library = {
-        "Oxytocin-Lover": "🌸 Cuddle up with a cozy playlist and text someone you adore.",
-        "Dopamine-Creator": "🎨 Make a 5-minute mood collage using images or colors.",
-        "Serotonin-Queen": "📋 Organize one small area of your home to feel in control.",
-        "Adrenaline-Explorer": "🗺️ Take a spontaneous walk or try a new snack from a culture you’ve never explored."
+        "Oxytocin-Lover": "💞 Call someone you love and share something you're grateful for.",
+        "Dopamine-Creator": "🎨 Start a small creative ritual, like 10 minutes of journaling with music.",
+        "Adrenaline-Explorer": "🧭 Take a walk in a direction you've never gone before.",
+        "Serotonin-Queen": "📚 Create a calming evening ritual with tea, a book, and candlelight."
     }
 
     key = f"{top_hormone}-{top_driver}"
-    spark = spark_library.get(key, "✨ Do something spontaneous that blends comfort and adventure.")
+    spark = spark_library.get(key, "✨ Your spark: Do one thing today that brings you both comfort and excitement.")
 
-    st.markdown("## Your Personalized Spark")
+    st.markdown("## ✨ Your Spark")
     st.success(spark)
-    st.markdown("_There are 60+ Sparks in the full version. This is just the beginning._")
-    st.markdown("❤️ Ready to feel like yourself again? Stay tuned for full access soon.")
+    st.markdown("_There are 60+ Sparks in the full version. This is just your beginning._")
